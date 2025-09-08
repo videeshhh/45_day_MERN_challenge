@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <title>Mybuisness card</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button id="theme">🌙 Toggle Theme</button>
+    <div class="card">
+        <center>
+            <img src="https://media.licdn.com/dms/image/v2/D4D03AQG1PSzww_ZM5g/profile-displayphoto-scale_200_200/B4DZhKwSeRH4Ag-/0/1753600831384?e=1759968000&v=beta&t=iqBynQlO2Zx4RGUmmuwwvOanZno0UNYBbco6LGX3I7o" alt="your image" class ="pfp">
+            <b>
+            <h1 class="name">Videesh Sharma</h1>
+        </b>
+        <h3>Student at Uttaranchal University</h3>
+        I'm Videesh Sharma a Computer Science Engineer who wants to build intelligent web solutions <br>
+        for real-world challenges. I want to skillfully integrate machine learning with full-stack <br>
+        development to engineer responsive, automated, and AI-driven applications. Focused on creating <br>
+        technology that is not just innovative but also practical, I am eager to apply my problem-solving <br>
+        skills to a challenging role where I can make a significant impact.<br>
+        <div class="social-links">
+        <a href="https://github.com/videeshhh" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/videesh-sharma/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://x.com/VideeshSharma" target="_blank">X</a>
+        <a href="https://instagram.com/videeshsharma" target="_blank"><i class="fab fa-instagram"></i></a>
+        </div>
+    </div>
+</center>
+<script>
+    const themeButton = document.getElementById('theme');
+    const body = document.querySelector('body');
+
+    themeButton.addEventListener('click' ,() =>{
+        body.classList.toggle('dark-mode');
+    
+
+    const isDark = body.classList.contains('dark-mode');
+    themeButton.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+});
+</script>
+</body>
