@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Quote Generator</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
+body { height:100vh; display:flex; justify-content:center; align-items:center; background: linear-gradient(365deg,#ffffff,#66a6ff); }
+.container { background:#fff; padding:30px 40px; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.2); width:90%; max-width:600px; text-align:center; }
+.header h1 { font-size:2rem; color:#333; margin-bottom:20px; }
+.quote-container { padding:20px; background:#f9f9f9; border-radius:15px; position:relative; }
+.quote-text { font-size:1.4rem; font-style:italic; color:#444; margin:20px 0; min-height:80px; }
+.quote-author { display:block; margin-top:10px; font-weight:bold; color:#555; }
+.quote-actions { margin-top:20px; display:flex; justify-content:center; gap:15px; }
+.quote-btn { padding:10px 20px; background:#4381d8; border:none; color:#fff; border-radius:10px; font-size:1rem; cursor:pointer; transition:all 0.3s ease; }
+.quote-btn:hover { background:#89f7fe; transform:scale(1.05); }
+.quote-btn.secondary { background:#ff758c; }
+.quote-btn.secondary:hover { background:#ff7eb3; }
+.spinner {padding-top: 20px;}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <header class="header"><h1>Random Quote Generator</h1></header>
+    <div class="quote-container">
+        <blockquote class="quote-text" id="quote-text">Click the button to fetch a quote!</blockquote>
+        <cite class="quote-author" id="quote-author"></cite>
+        <div class="quote-actions">
+            <button class="quote-btn" id="new-quote-btn">Get New Quote</button>
+            <button class="quote-btn secondary" id="copy-quote-btn">Copy Quote</button>
+        </div>
+        <div class="loading-indicator" id="loading-indicator">
+            <div class="spinner"></div>
+            <p>Loading....</p>
+        </div>
+        <div class="error"></div>
+    </div>
+</div>
+
+<script>
+const apiURL = 'https://api.quotable.io/random';
+const fallbackQuotes = [
+    { content: "The best way to get started is to quit talking and begin doing.", author: "Walt Disney" },
+    { content: "Don't let yesterday take up too much of today.", author: "Will Rogers" },
+    { content: "It's not whether you get knocked down, it's whether you get up.", author: "Vince Lombardi" },
+    { content: "Your time is limited, so don't waste it living someone else's life.", author: "Steve Jobs" },
+    { content: "The only limit to our realization of tomorrow is our doubts of today.", author: "Franklin D. Roosevelt" }
+];
+
+const quoteText = document.getElementById('quote-text');
+const quoteAuthor = document.getElementById('quote-author');
+const newQuoteBtn = document.getElementById('new-quote-btn');
+const copyQuoteBtn = document.getElementById('copy-quote-btn');
+const loadingIndicator = document.getElementById('loading-indicator');
+const error = document.getElementById('error');
+
+function showLoading(show){
+    loadingIndicator.style.display = show ? 'block' : 'none';
+    newQuoteBtn.disabled = show;
+}
+
+function getRandomQuote(){
+    showLoading(true);
+    fetch(apiURL)
+    .then(res => res.json())
+    .then(data => {
+        if(!data.content || !data.author) throw new Error('Invalid API data');
+        quoteText.textContent = data.content;
+        quoteAuthor.textContent = `— ${data.author}`;
+        error.innerHTML = ''; 
+    })
+    .catch(err => {
+        const fallback = fallbackQuotes[Math.floor(Math.random()*fallbackQuotes.length)];
+        quoteText.textContent = fallback.content;
+        quoteAuthor.textContent = `— ${fallback.author}`;
+        error.innerHTML = "<span style='color:red;'>API is not working, these are fallback quotes</span>";
+    })
+    .finally(()=> showLoading(false));
+}
+
+
+function copyQuote(){
+    const fullQuote = `${quoteText.textContent} ${quoteAuthor.textContent}`;
+    navigator.clipboard.writeText(fullQuote)
+    .then(()=> alert('Quote copied!'))
+    .catch(err => console.error(err));
+}
+
+newQuoteBtn.addEventListener('click', getRandomQuote);
+copyQuoteBtn.addEventListener('click', copyQuote);
+window.addEventListener('DOMContentLoaded', getRandomQuote);
+</script>
+
+</body>
+</html>
